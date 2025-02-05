@@ -2,7 +2,7 @@
 #include <WebServer.h>
 #include <ESP32Servo.h>
 
-const char* ssid = "ESP32_FLY";
+const char* ssid = "ESP_CORD";
 const char* password = "12345678";
 
 WebServer server(80);
