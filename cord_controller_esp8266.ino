@@ -2,7 +2,7 @@
 #include <ESP8266WebServer.h>
 #include <Servo.h>
 
-const char* ssid = "ESP_FLY";
+const char* ssid = "ESP_CORD";
 const char* password = "12345678";
 
 ESP8266WebServer server(80);
@@ -15,15 +15,12 @@ unsigned long startTime = 0;
 bool servoShouldReturn = false;
 const int servoPin = 2;
 const int buttonPin = 3;
-const int ledPin = 8;
 bool buttonPressed = false;
 
 void setup() {
     servo.attach(servoPin);
     servo.write(defaultAngle);
     pinMode(buttonPin, INPUT_PULLUP);
-    pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, HIGH);
     
     Serial.begin(115200);
     WiFi.softAP(ssid, password);
@@ -57,7 +54,6 @@ void setup() {
 
     server.on("/stop", HTTP_GET, []() {
       servo.write(defaultAngle);
-      digitalWrite(ledPin, HIGH);
       duration=0;
       isServoActive = false;
       server.send(200, "text/html", "<h1>stop ok</h1><script>window.setTimeout(function(){window.location.href = '/';}, 1000);</script>");
@@ -78,7 +74,6 @@ void loop() {
             servo.write(defaultAngle);
             duration=0;
             isServoActive = false;
-            digitalWrite(ledPin, HIGH);
         }else{
             angle = 170;
             duration = 3;
@@ -101,7 +96,6 @@ void loop() {
     if (isServoActive && millis() >= startTime) {
         servo.write(defaultAngle);
         isServoActive = false;
-        digitalWrite(ledPin, HIGH);
         Serial.println("Servo returned to default");
     }
 }
@@ -110,7 +104,6 @@ void smoothMoveServo(int targetAngle, int durationMs) {
     int startAngle = servo.read();
     int steps = durationMs / 50; // Крок оновлення кожні 50 мс
     float stepSize = (targetAngle - startAngle) / (float)steps;
-    digitalWrite(ledPin, LOW);
     
     for (int i = 0; i < steps; i++) {
         startAngle += stepSize;
