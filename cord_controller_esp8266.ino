@@ -13,8 +13,8 @@ int duration = 1; // В хвилинах
 bool isServoActive = false;
 unsigned long startTime = 0;
 bool servoShouldReturn = false;
-const int servoPin = 2;
-const int buttonPin = 3;
+const int servoPin = 5; //D1
+const int buttonPin = 4; //D2
 bool buttonPressed = false;
 
 void setup() {
